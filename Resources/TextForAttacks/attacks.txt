@@ -1,0 +1,15 @@
+rogue,attack1,10
+rogue,attack2,20
+rogue,attack3,5
+rogue,attack4,10
+rogue,attack5,20
+tank,attack1,10
+tank,attack2,20
+tank,attack3,5
+tank,attack4,10
+tank,attack5,20
+mage,attack1,10
+mage,attack2,20
+mage,attack3,5
+mage,attack4,10
+mage,attack5,20

@@ -2,37 +2,47 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class AttackSystem : MonoBehaviour {
 
-	public float attackValue;
+	public Dictionary<string, Dictionary<string, int>> attack_values = new Dictionary<string, Dictionary<string, int>>();
+	public Dictionary<string, int> attacksForRogue = new Dictionary<string, int>();
+	public Dictionary<string, int> attacksForMage = new Dictionary<string, int>();
+	public Dictionary<string, int> attacksForTank = new Dictionary<string, int>();
 
-	//public Text textAttack;
+	public string[] allAttacks;
 
-	public GameObject[] Arrows;
+	public const string rogue = "rogue";
+	public const string mage = "mage";
+	public const string tank = "tank";
 
-	public GameObject currEvent;
-	public GameObject lastEvent;
+	public TextAsset attacks;
 
-	// Update is called once per frame
-	void Update () {
+	void Awake()
+	{
+		allAttacks = attacks.text.Split('\n');
 
-		currEvent = EventSystem.current.currentSelectedGameObject;
-		if(currEvent != lastEvent && currEvent != null)
+		for(int i = 0; i < allAttacks.Length; ++i)
 		{
-			if(currEvent.name.Split('_')[0] == "Selection")
-			{
-				int index = int.Parse(currEvent.name.Split('_')[2]);
-				Arrows[index].SetActive(true);
-				if(lastEvent != null)
-				{
-					Arrows[int.Parse(lastEvent.name.Split ('_')[2])].SetActive(false);
-				}
-				lastEvent = currEvent;
-			}
-		}
+			string singleAttack = allAttacks[i];
 
-		//textAttack.text = attackValue.ToString();
-	
+			switch(singleAttack.Split(',')[0])
+			{
+			case rogue:
+				attacksForRogue.Add(singleAttack.Split(',')[1], int.Parse(singleAttack.Split(',')[2]));
+				break;
+			case mage:
+				attacksForMage.Add(singleAttack.Split(',')[1], int.Parse(singleAttack.Split(',')[2]));
+				break;
+			case tank:
+				attacksForTank.Add(singleAttack.Split(',')[1], int.Parse(singleAttack.Split(',')[2]));
+				break;
+			}
+		} 
+
+		attack_values.Add(rogue, attacksForRogue);
+		attack_values.Add(mage, attacksForMage);
+		attack_values.Add(tank, attacksForTank);
 	}
 }
