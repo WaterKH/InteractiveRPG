@@ -5,8 +5,9 @@ public class Mage : Character {
 
 	public static int numberOfClasses = 7;
 	public static TreeDataStructure mageTree = new TreeDataStructure(numberOfClasses / 2);
+	//public static int currentLevel = 0;
 
-	public void addToMageTree(int index, string data)
+	public void addToMageTree(int index, string[] data)
 	{
 		mageTree.insert(mageTree.root, index, data);
 	}
@@ -14,5 +15,10 @@ public class Mage : Character {
 	public void printTree()
 	{
 		mageTree.printInOrder(mageTree.root);
+	}
+
+	public string[] getCurrentAttacksNames()
+	{
+		return mageTree.find(base.getLevel());
 	}
 }

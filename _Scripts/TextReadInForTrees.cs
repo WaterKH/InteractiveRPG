@@ -14,21 +14,24 @@ public class TextReadInForTrees : MonoBehaviour {
 		fullTextDividedByLine = tankTextTree.text.Split('\n');
 		for(int i = 0; i < fullTextDividedByLine.Length; ++i)
 		{
-			Game.tank.addToTankTree(int.Parse(fullTextDividedByLine[i].Split('-')[1]), fullTextDividedByLine[i].Split('-')[0]);
+			Game.tank.addToTankTree(int.Parse(fullTextDividedByLine[i].Split('/')[1]), 
+									fullTextDividedByLine[i].Split('-'));
 		}
 		Game.tank.printTree();
 		Debug.Log("TANK TREE COMPLETED");
 		fullTextDividedByLine = rogueTextTree.text.Split('\n');
 		for(int i = 0; i < fullTextDividedByLine.Length; ++i)
 		{
-			Game.rogue.addToRogueTree(int.Parse(fullTextDividedByLine[i].Split('-')[1]), fullTextDividedByLine[i].Split('-')[0]);
+			Game.rogue.addToRogueTree(int.Parse(fullTextDividedByLine[i].Split('/')[1]), 
+									  fullTextDividedByLine[i].Split('-'));
 		}
 		Game.tank.printTree();
 		Debug.Log("ROGUE TREE COMPLETED");
 		fullTextDividedByLine = mageTextTree.text.Split('\n');
 		for(int i = 0; i < fullTextDividedByLine.Length; ++i)
 		{
-			Game.mage.addToMageTree(int.Parse(fullTextDividedByLine[i].Split('-')[1]), fullTextDividedByLine[i].Split('-')[0]);
+			Game.mage.addToMageTree(int.Parse(fullTextDividedByLine[i].Split('/')[1]),
+									fullTextDividedByLine[i].Split('-'));
 		}
 		Game.tank.printTree();
 		Debug.Log("MAGE TREE COMPLETED");

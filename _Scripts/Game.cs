@@ -4,6 +4,9 @@ using System.Collections;
 public class Game : MonoBehaviour {
 
 	public TriggerElements triggerElem;
+	public AttackUI attackUI;
+
+	public static Character mainCharacter = new Character();
 
 	public static Tank tank = new Tank();
 	public static Mage mage = new Mage();
@@ -15,7 +18,8 @@ public class Game : MonoBehaviour {
 	{
 		if(playerTurn)
 		{
-			triggerElem.attackSelected();
+			playerTurn = false;
+			attackUI.showAttacks();
 		}
 	}
 }

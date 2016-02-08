@@ -15,11 +15,11 @@ public class TriggerElements : MonoBehaviour {
 
 	public void directionSelected()
 	{
-		ElemAnimator.SetBool("ElemAppear", true);
+		//ElemAnimator.SetBool("ElemAppear", true);
 	}
 	public void directionDeselected()
 	{
-		ElemAnimator.SetBool("ElemAppear", false);
+		//ElemAnimator.SetBool("ElemAppear", false);
 	}
 
 	public void elementalSelected()
@@ -34,8 +34,8 @@ public class TriggerElements : MonoBehaviour {
 
 	public void attackSelected()//Button attack)
 	{
-		MovementAnimator.SetBool("OpenAttMenu", true);
-		currPathName = "Paths_Thrust";
+		//MovementAnimator.SetBool("OpenAttMenu", true);
+		//currPathName = "Paths_Thrust";
 		//currPathName = attack.name;
 	}
 	public void attackDeselected()

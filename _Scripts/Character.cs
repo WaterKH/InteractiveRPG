@@ -10,6 +10,15 @@ public class Character {
 	public float willpower;
 	public float spirit;
 
+	public int numberOfAttacks;
+
+	public int currentCharacter; // !!NOTE!! - Mage = 0, Rogue = 1, Tank = 2, Enemy = -1
+
+	public float experiencePoints;
+	public int currentLevel;
+
+	public string[] levels = new string[20];
+
 	public Character()
 	{
 		health = 0.0f;
@@ -18,9 +27,17 @@ public class Character {
 		dexterity = 0.0f;
 		willpower = 0.0f;
 		spirit = 0.0f;
+
+		numberOfAttacks = 3;
+
+		currentCharacter = 0;
+
+		experiencePoints = 0.0f;
+		currentLevel = 0;
 	}
 
-	public Character(float aHealth, float aStrength, float aFortitude, float aDexterity, float aWillpower, float aSpirit)
+	public Character(float aHealth, float aStrength, float aFortitude, float aDexterity, float aWillpower, float aSpirit,
+					int numberOfAttacks, int character)
 	{
 		this.setHealth(aHealth);
 		this.setStrength(aStrength);
@@ -28,6 +45,13 @@ public class Character {
 		this.setDexterity(aDexterity);
 		this.setWillpower(aWillpower);
 		this.setSpirit(aSpirit);
+
+		this.setNumberOfAttacks(numberOfAttacks);
+
+		this.setCurrentCharacter(character);
+
+		this.setEXP(0);
+		this.setLevel(0);
 	}
 
 	/*************************************************
@@ -59,6 +83,25 @@ public class Character {
 		return spirit;
 	}
 
+	public int getNumberOfAttacks()
+	{
+		return numberOfAttacks;
+	}
+
+	public int getCurrentCharacter()
+	{
+		return currentCharacter;
+	}
+
+	public float getEXP()
+	{
+		return experiencePoints;
+	}
+	public int getLevel()
+	{
+		return currentLevel;
+	}
+
 	/*************************************************
 	 * Basic Mutators
 	**/
@@ -87,4 +130,65 @@ public class Character {
 	{
 		spirit = aSpirit;
 	}
+
+	public void setNumberOfAttacks(int anAttackNumber)
+	{
+		numberOfAttacks = anAttackNumber;
+	}
+
+	public void setCurrentCharacter(int character)
+	{
+		currentCharacter = character;
+	}
+
+	public void setEXP(float EXP)
+	{
+		experiencePoints = EXP;
+	}
+	public void setLevel(int level)
+	{
+		currentLevel = level;
+	}
+
+	/******************************************************************************
+	 * General Functions
+	 *
+	**/
+	public void levelUp()
+	{
+		this.setLevel(this.getLevel() + 1);
+
+		this.increaseHealth(float.Parse(levels[this.getLevel()].Split(',')[0]));
+		this.increaseAttack(float.Parse(levels[this.getLevel()].Split(',')[1]));
+		this.increaseEvasion(float.Parse(levels[this.getLevel()].Split(',')[2]));
+		this.increaseSpecial();
+		this.increaseRegenSP();
+		this.increaseCrits();
+	}
+
+	public void increaseHealth(float aHealth)
+	{
+		this.setHealth(this.getHealth() + aHealth);
+	}
+	public void increaseAttack(float anAtt)
+	{
+		this.setStrength(this.getStrength() + anAtt);
+	}
+	public void increaseEvasion(float aDex)
+	{
+		this.setDexterity(this.getDexterity() + aDex);
+	}
+	public void increaseSpecial()
+	{
+		
+	}
+	public void increaseRegenSP()
+	{
+		
+	}
+	public void increaseCrits()
+	{
+		
+	}
+
 }
