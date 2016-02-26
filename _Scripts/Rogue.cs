@@ -6,6 +6,7 @@ public class Rogue : Character {
 	public static int numberOfClasses = 7;
 	public static TreeDataStructure rogueTree = new TreeDataStructure(numberOfClasses / 2);
 	//public static int currentLevel = 0;
+	//public int numberOfElements;
 
 	public void addToRogueTree(int index, string[] data)
 	{
@@ -19,13 +20,16 @@ public class Rogue : Character {
 
 	public string[] getCurrentAttacksNames()
 	{
-		//string[] temp = rogueTree.find(currentLevel);
-
-		//for(int i = 0; i < temp.Length; ++i)
-		//{
-		//	Debug.Log(temp[i]);
-		//}
 		return rogueTree.find(base.getLevel());
-
 	}
+
+	/*public void setNumberOfElements(int elems)
+	{
+		numberOfElements = elems;
+	}
+
+	public int getNumberOfElements()
+	{
+		return numberOfElements;
+	}*/
 }

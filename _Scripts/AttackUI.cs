@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class AttackUI : MonoBehaviour {
 
 	public GameObject[] attackUIElements = new GameObject[8];
+	public GameObject[] elementUIHolder = new GameObject[4];
 	public GameObject parent;
 	public GameObject centerObject;
 	public bool alphaChanging = false;
@@ -78,5 +79,33 @@ public class AttackUI : MonoBehaviour {
 			}
     	}
     	yield return new WaitForSeconds(0.0f);
+    }
+
+    public void showElements(GameObject attackSelected)
+    {
+    	int numberOfElements = Game.mainCharacter.numberOfElements;
+
+		float angle = 0.5f;
+		float rad = 1f;
+		float timer = 0.25f;
+
+		for(int i = 0; i < numberOfElements; ++i)
+		{
+			float theta = (2 * Mathf.PI / 3) * i + 2.2f;
+			Vector2 pos = new Vector2 ((Mathf.Sin(theta * angle) * rad), (Mathf.Cos(theta * angle) * rad));
+
+			GameObject elementOrb = Instantiate(Resources.Load("ElementUI") as GameObject);
+
+			alphaChanging = true;
+			StartCoroutine(startShowing(elementOrb));
+
+			elementOrb.transform.position = pos;
+			elementOrb.transform.SetParent(attackSelected.transform.parent.transform, false);
+
+			elementUIHolder[i] = elementOrb;
+
+			timer = 0.5f;
+			angle = timer;
+		}
     }
 }

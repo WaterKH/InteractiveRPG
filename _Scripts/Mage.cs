@@ -6,6 +6,7 @@ public class Mage : Character {
 	public static int numberOfClasses = 7;
 	public static TreeDataStructure mageTree = new TreeDataStructure(numberOfClasses / 2);
 	//public static int currentLevel = 0;
+	//public int numberOfElements;
 
 	public void addToMageTree(int index, string[] data)
 	{
@@ -21,4 +22,14 @@ public class Mage : Character {
 	{
 		return mageTree.find(base.getLevel());
 	}
+
+	/*public void setNumberOfElements(int elems)
+	{
+		numberOfElements = elems;
+	}
+
+	public int getNumberOfElements()
+	{
+		return numberOfElements;
+	}*/
 }

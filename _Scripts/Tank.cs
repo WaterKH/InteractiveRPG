@@ -7,6 +7,7 @@ public class Tank : Character {
 	public static int numberOfClasses = 7;
 	public static TreeDataStructure tankTree = new TreeDataStructure(numberOfClasses / 2);
 	//public static int currentLevel = 0;
+	//public int numberOfElements;
 
 	public void addToTankTree(int index, string[] data)
 	{
@@ -20,13 +21,17 @@ public class Tank : Character {
 
 	public string[] getCurrentAttacksNames()
 	{
-		//string[] temp = tankTree.find(base.getLevel());
-
-		//for(int i = 0; i < temp.Length; ++i)
-		//{
-		//	Debug.Log(temp[i]);
-		//}
-
 		return tankTree.find(base.getLevel());
 	}
+
+	/*public void setNumberOfElements(int elems)
+	{
+		numberOfElements = elems;
+	}
+
+	public int getNumberOfElements()
+	{
+		return numberOfElements;
+	}*/
+
 }

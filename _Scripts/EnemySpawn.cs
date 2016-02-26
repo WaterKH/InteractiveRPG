@@ -9,144 +9,81 @@ public class EnemySpawn : MonoBehaviour {
 	public Vector3 finalPos;
 	public bool firstPass = true;
 	public int randNumb = 1;
+	public int spawnLimit = 7;
+	public Transform[] spawnLocations;
+	public List<Vector3> positionToGo = new List<Vector3>();
+	public bool finished = true;
+	public GameObject enemyParent;
+	public float speed = 1.5f;
 
-	bool finished = true;
+	public Camera mainCamera;
 
-	public void SpawnEnemy()
+	public GameObject player;
+
+	void Awake()
 	{
-		int randomSpawn = Random.Range(1, 7);
-
-		for(int i = 0; i < randomSpawn; ++i)
+		for(int i = 0; i < spawnLimit + 1; ++i)
 		{
-			GameObject enemy = Instantiate(Resources.Load("Enemy") as GameObject);
-			enemies.Add(enemy);
+			SpawnEnemy(i);
 		}
 	}
 
-	public void DeSpawnEnemy(GameObject enemy)
+	public void SpawnEnemy(int counter)
+	{
+		int randomSpawnLocation = Random.Range(0, spawnLocations.Length - 1);
+		GameObject enemy = Instantiate(Resources.Load("Enemy") as GameObject);
+
+		enemies.Add(enemy);
+		enemy.transform.position = spawnLocations[randomSpawnLocation].position;
+		enemy.transform.SetParent(enemyParent.transform);
+		enemy.name += "-" + counter;
+
+		positionToGo.Add(enemy.transform.position);
+	}
+
+	public void DeSpawnEnemy(GameObject enemy, Vector3 pos)
 	{
 		enemies.Remove(enemy);
 		Destroy(enemy);
+		int counter = positionToGo.IndexOf(pos);
+		positionToGo.Remove(pos);
 
-		//SpawnEnemy();
+		SpawnEnemy(counter);
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
-		if(finished)
+		for(int i = 0; i < enemies.Count; ++i)
 		{
-			finished = false;
-			for(int i = 0; i < enemies.Count; ++i)
-			{
-				charMovement(enemies[i].transform, 2.5f, 2);
-			}
-			finished = true;
-		}
-	}
+			if(enemies[i].transform.position == positionToGo[i])
+			{	
+				float screenX = Random.Range(0.0f, mainCamera.pixelWidth);
+ 				float screenY = Random.Range(0.0f, mainCamera.pixelHeight);
+				Vector3 point = mainCamera.ScreenToWorldPoint(new Vector3(screenX, screenY, 0.0f));
 
-	public void resetFirstPass()
-	{
-		randNumb = Random.Range(1, 9);
-		firstPass = true;
-	}
-
-	public void charMovement(Transform currPos, float moveByHowMuch, int howFast)
-	{
-		float heading = 0f;
-		
-		switch(randNumb)
-		{
-		case 1: // Right
-			if(firstPass)
-			{
-				finalPos = new Vector3(currPos.position.x + moveByHowMuch, currPos.position.y, currPos.position.z);
-				firstPass = false;
+				positionToGo.Insert(i, point);
 			}
-			currPos.position = Vector3.Lerp(currPos.position, finalPos, Time.deltaTime * howFast);
-			heading = Mathf.Atan2(-1, 0);
-			break;
-		case 2: // Up
-			if(firstPass)
+			else if(PlayerMovement.move.x != 0 || PlayerMovement.move.y != 0)
 			{
-				finalPos = new Vector3(currPos.position.x, currPos.position.y + moveByHowMuch, currPos.position.z);
-				firstPass = false;
+				if(enemies[i].GetComponent<EnemyAttack>().attackingEnemy)
+				{
+					enemies[i].transform.position = Vector3.Lerp(enemies[i].transform.position, player.transform.position, Time.deltaTime * 2);
+				}
+				else
+				{
+					enemies[i].transform.position = Vector3.Lerp(enemies[i].transform.position, positionToGo[i], Time.deltaTime * speed);
+				}
 			}
-			currPos.position = Vector3.Lerp(currPos.position, finalPos, Time.deltaTime * howFast);
-			heading = Mathf.Atan2(0, 1);
-			break;
-		case 3: // Left
-			if(firstPass)
-			{
-				finalPos = new Vector3(currPos.position.x - moveByHowMuch, currPos.position.y, currPos.position.z);
-				firstPass = false;
-			}
-			currPos.position = Vector3.Lerp(currPos.position, finalPos, Time.deltaTime * howFast);
-			heading = Mathf.Atan2(1, 0);
-			break;
-		case 4: // Down
-			if(firstPass)
-			{
-				finalPos = new Vector3(currPos.position.x, currPos.position.y - moveByHowMuch, currPos.position.z);
-				firstPass = false;
-			}
-			currPos.position = Vector3.Lerp(currPos.position, finalPos, Time.deltaTime * howFast);
-			heading = Mathf.Atan2(0, -1);
-			break;
-		case 5: // Up & Right
-			if(firstPass)
-			{
-				finalPos = new Vector3(currPos.position.x + moveByHowMuch, currPos.position.y + moveByHowMuch, currPos.position.z);
-				firstPass = false;
-			}
-			currPos.position = Vector3.Lerp(currPos.position, finalPos, Time.deltaTime * howFast);
-			heading = Mathf.Atan2(-1, 1);
-			break;
-		case 6: // Up & Left
-			if(firstPass)
-			{
-				finalPos = new Vector3(currPos.position.x - moveByHowMuch, currPos.position.y + moveByHowMuch, currPos.position.z);
-				firstPass = false;
-			}
-			currPos.position = Vector3.Lerp(currPos.position, finalPos, Time.deltaTime * howFast);
-			heading = Mathf.Atan2(1, 1);
-			break;
-		case 7: // Down & Right
-			if(firstPass)
-			{
-				finalPos = new Vector3(currPos.position.x + moveByHowMuch, currPos.position.y - moveByHowMuch, currPos.position.z);
-				firstPass = false;
-			}
-			currPos.position = Vector3.Lerp(currPos.position, finalPos, Time.deltaTime * howFast);
-			heading = Mathf.Atan2(-1, -1);
-			break;
-		case 8: // Down & Left
-			if(firstPass)
-			{
-				finalPos = new Vector3(currPos.position.x - moveByHowMuch, currPos.position.y - moveByHowMuch, currPos.position.z);
-				firstPass = false;
-			}	
-			currPos.position = Vector3.Lerp(currPos.position, finalPos, Time.deltaTime * howFast);
-			heading = Mathf.Atan2(1, -1);
-			break;
-		default:
-			break;
 		}
-
-		if(Mathf.Abs(finalPos.x - currPos.position.x) <= 0.1f && Mathf.Abs(finalPos.y - currPos.position.y) <= 0.1f)
-		{
-//			Debug.Log("Reached");
-			resetFirstPass();
-		}
-		currPos.rotation = Quaternion.Euler(0f, 0f, heading * Mathf.Rad2Deg);
 	}
 
 	public void OnTriggerExit2D(Collider2D col)
 	{
 		if(col.tag == "Enemy")
 		{
-			Debug.Log("Despawning Enemy");
-			DeSpawnEnemy(col.gameObject);
+			//Debug.Log("Despawning Enemy");
+			DeSpawnEnemy(col.gameObject, positionToGo[int.Parse(col.name.Split('-')[1])]);
 		}
 	}
 }

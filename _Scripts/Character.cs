@@ -11,6 +11,7 @@ public class Character {
 	public float spirit;
 
 	public int numberOfAttacks;
+	public int numberOfElements;
 
 	public int currentCharacter; // !!NOTE!! - Mage = 0, Rogue = 1, Tank = 2, Enemy = -1
 
@@ -29,6 +30,7 @@ public class Character {
 		spirit = 0.0f;
 
 		numberOfAttacks = 3;
+		numberOfElements = 2;
 
 		currentCharacter = 0;
 
@@ -37,7 +39,7 @@ public class Character {
 	}
 
 	public Character(float aHealth, float aStrength, float aFortitude, float aDexterity, float aWillpower, float aSpirit,
-					int numberOfAttacks, int character)
+					int numberOfAtts, int numberOfElems, int character)
 	{
 		this.setHealth(aHealth);
 		this.setStrength(aStrength);
@@ -46,7 +48,8 @@ public class Character {
 		this.setWillpower(aWillpower);
 		this.setSpirit(aSpirit);
 
-		this.setNumberOfAttacks(numberOfAttacks);
+		this.setNumberOfAttacks(numberOfAtts);
+		this.setNumberOfElements(numberOfElems);
 
 		this.setCurrentCharacter(character);
 
@@ -86,6 +89,10 @@ public class Character {
 	public int getNumberOfAttacks()
 	{
 		return numberOfAttacks;
+	}
+	public int getNumberOfElements()
+	{
+		return numberOfElements;
 	}
 
 	public int getCurrentCharacter()
@@ -134,6 +141,10 @@ public class Character {
 	public void setNumberOfAttacks(int anAttackNumber)
 	{
 		numberOfAttacks = anAttackNumber;
+	}
+	public void setNumberOfElements(int anElemNumber)
+	{
+		numberOfElements = anElemNumber;
 	}
 
 	public void setCurrentCharacter(int character)
