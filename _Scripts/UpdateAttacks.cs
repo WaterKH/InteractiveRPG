@@ -1,72 +1,125 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
+using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class UpdateAttacks : MonoBehaviour {
 
-	public bool isShowing = false;
-	public GameObject toShow;
-	public GameObject toHide;
-	public bool elements = false;
+	public TriggersForAttackSystem triggersAttack;
 
-	public AttackUI attackUI;
+	public int menuBubble = 0;
+	public int whackBubble = 1;
+	public int magicBubble = 2;
 
-	public Animator ElemAnimator;
+	public int tempCharacter;
+
+	public float actualSpeed;
+	public bool hasAttacked;
+
+	public Dictionary<string, GameObject> attackTracks = new Dictionary<string, GameObject>();
+	public GameObject currAttackHolder;
+
+	public Button center_Menu;
+	public Button center_Whack;
+	public Button center_Magic;
+
+	public Button currButton;
 
 	void Awake()
 	{
-		attackUI = GameObject.Find("Attacks[Canvas]").GetComponent<AttackUI>();
-	}
-
-	public void showDescription(GameObject hoverObject)
-    {
-    	if(!elements)
-    	{
-    		isShowing = true;
-			toShow = hoverObject;
-    	}
-    }
-
-    public void hideDescription(GameObject hoverObject)
-    {
-		isShowing = false;
-		toHide = hoverObject;
-    }
-   
-	void Update () {
-
-		if(isShowing)
+		foreach(Transform transform in currAttackHolder.GetComponentsInChildren<Transform>())
 		{
-			toShow.GetComponentInChildren<CanvasGroup>().alpha = 
-			Mathf.Lerp(toShow.GetComponentInChildren<CanvasGroup>().alpha, 1, Time.deltaTime * 2);
-			toShow.GetComponentInChildren<CanvasGroup>().interactable = true;
-			toShow.GetComponentInChildren<CanvasGroup>().blocksRaycasts = true;
-		}
-
-		else
-		{
-			if(toHide != null)
+			if(transform.name.Contains("Paths_"))
 			{
-				toHide.GetComponentInChildren<CanvasGroup>().alpha = 
-					Mathf.Lerp(toHide.GetComponentInChildren<CanvasGroup>().alpha, 0, Time.deltaTime * 2);
-				toHide.GetComponentInChildren<CanvasGroup>().interactable = false;
-				toHide.GetComponentInChildren<CanvasGroup>().blocksRaycasts = false;
+				attackTracks.Add(transform.name, transform.gameObject);
+				print(attackTracks[transform.name].name);
 			}
 		}
 	}
 
-	public void ClickedAttackButton (GameObject button)
+	/************************************************************
+	 * Circle arrangement code created by Unity Answers; Modified by Jacob Clark
+	 *
+	**/
+	public void showAttacks()
 	{
-		Debug.Log("Clicked");
-		for(int i = 0; i < attackUI.attackUIElements.Length; ++i)
+		string[] nameOfAttacks;
+		switch(Game.mainCharacter.currentCharacter)
 		{
-			if(attackUI.attackUIElements[i] != null)
+		case 0: // MAGE
+			nameOfAttacks = Game.mage.getCurrentAttacksNames();
+			break;
+		case 1: // ROGUE
+			nameOfAttacks = Game.rogue.getCurrentAttacksNames();
+			break;
+		case 2: // TANK
+			nameOfAttacks = Game.tank.getCurrentAttacksNames();
+			break;
+		default:
+			return;
+		}
+		//TODO Add names to attackMenu
+
+		triggersAttack.systemAnimator[menuBubble].SetTrigger("Appear");
+
+		currButton = center_Menu;
+	}
+
+	public void hoveredOverMagic(Button magic)
+	{
+		triggersAttack.systemAnimator[magicBubble].SetTrigger("Appear");
+		triggersAttack.systemAnimator[menuBubble].SetTrigger("Disappear");
+
+		currButton = center_Magic;
+	}
+
+	public void hoveredOverWhack()
+	{
+		triggersAttack.systemAnimator[whackBubble].SetTrigger("Appear");
+		triggersAttack.systemAnimator[menuBubble].SetTrigger("Disappear");
+	
+		currButton = center_Whack;
+	}
+
+	public void hoveredOverBack(int currBubble)
+	{
+		triggersAttack.systemAnimator[currBubble].SetTrigger("Disappear");
+		triggersAttack.systemAnimator[menuBubble].SetTrigger("Appear");
+
+		currButton = center_Menu;
+	}
+
+	public void hoveredOverAttack(GameObject attack)
+	{
+		string attackName = attack.name;
+		print(attackName);
+		attackTracks[attackName].SetActive(true);
+	}
+
+	public void continueBattle()
+	{
+		hasAttacked = true;
+	}
+
+	void Update()
+	{
+		if(hasAttacked)
+		{
+			if(actualSpeed == Game.mainCharacter.getDexterity())
 			{
-				Debug.Log(attackUI.attackUIElements[i].name);
-				attackUI.attackUIElements[i].GetComponent<UpdateAttacks>().elements = true;
+				showAttacks();
+				hasAttacked = false;
+				actualSpeed = 0;
+			}
+			else 
+			{
+				actualSpeed += Time.deltaTime / 2;
 			}
 		}
-		attackUI.showElements(button);
-		//ElemAnimator.SetBool("ElemAppear", true);
+
+		currButton.Select();
+		//print(EventSystem.current.currentSelectedGameObject.name);
 	}
 }

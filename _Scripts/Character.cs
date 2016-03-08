@@ -11,7 +11,7 @@ public class Character {
 	public float spirit;
 
 	public int numberOfAttacks;
-	public int numberOfElements;
+	public int  numberOfElements;
 
 	public int currentCharacter; // !!NOTE!! - Mage = 0, Rogue = 1, Tank = 2, Enemy = -1
 
@@ -201,5 +201,4 @@ public class Character {
 	{
 		
 	}
-
 }

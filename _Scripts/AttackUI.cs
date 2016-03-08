@@ -1,14 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class AttackUI : MonoBehaviour {
 
-	public GameObject[] attackUIElements = new GameObject[8];
-	public GameObject[] elementUIHolder = new GameObject[4];
-	public GameObject parent;
-	public GameObject centerObject;
-	public bool alphaChanging = false;
+	//public GameObject[] attackUIElements = new GameObject[8];
+	//public GameObject[] elementUIHolder = new GameObject[4];
+	//public GameObject parent;
+	//public GameObject centerObject;
+	//public bool alphaChanging = false;
+
+	public Dictionary<string, GameObject> attackTracks = new Dictionary<string, GameObject>();
+	public GameObject currAttackHolder;
+
+	void Awake()
+	{
+		foreach(Transform transform in currAttackHolder.GetComponentsInChildren<Transform>())
+		{
+			if(transform.name.Contains("Paths_"))
+			{
+				attackTracks.Add(transform.name, gameObject);
+			}
+		}
+	}
 
 	/************************************************************
 	 * Circle arrangement code created by Unity Answers; Modified by Jacob Clark
@@ -16,7 +31,7 @@ public class AttackUI : MonoBehaviour {
 	**/
 	public void showAttacks()
 	{
-		int numberOfUIAttackElems = Game.mainCharacter.numberOfAttacks;
+		//int numberOfUIAttackElems = Game.mainCharacter.numberOfAttacks;
 		string[] nameOfAttacks;
 		switch(Game.mainCharacter.currentCharacter)
 		{
@@ -32,7 +47,9 @@ public class AttackUI : MonoBehaviour {
 		default:
 			return;
 		}
-		float angle = 0.5f;
+	}
+
+		/*float angle = 0.5f;
 		float rad = 2f;
 		float timer = 0.25f;
 
@@ -81,7 +98,7 @@ public class AttackUI : MonoBehaviour {
     	yield return new WaitForSeconds(0.0f);
     }
 
-    public void showElements(GameObject attackSelected)
+   	public void showElements(GameObject attackSelected)
     {
     	int numberOfElements = Game.mainCharacter.numberOfElements;
 
@@ -107,5 +124,5 @@ public class AttackUI : MonoBehaviour {
 			timer = 0.5f;
 			angle = timer;
 		}
-    }
+    }*/
 }

@@ -46,6 +46,7 @@ public class PathMovement : MonoBehaviour {
 		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 		if(hit.transform != null)
 		{
+			print(hit.transform.name);
 			if(hit.transform.tag == "GreenPath")
 			{
 				currZoneBackground.color = green;
